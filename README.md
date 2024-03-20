@@ -1,2 +1,2 @@
-# motoko-workspace
-This repo is for learning and experiencing the Motoko programming language as well as the Internet Computer (ICP) blockchain.
+# ICP Bootcamp Projects
+The projects developed during the **Internet Computer Bootcamp** are inside the ***projects*** folder located, as the name speaks for itself.

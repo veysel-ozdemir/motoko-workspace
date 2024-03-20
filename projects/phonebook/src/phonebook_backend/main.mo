@@ -20,12 +20,12 @@ actor PhoneBook {
   let phonebook = Map.HashMap<Name, Entry>(0, Text.equal, Text.hash);
 
   // functions
-  // query function
+  // update function
   public func insert(name : Name, entry : Entry) : async () {
     phonebook.put(name, entry);
   };
 
-  // update function
+  // query function
   public query func lookup(name : Name) : async ?Entry {
     phonebook.get(name); // return phonebook.get(name);
   };
