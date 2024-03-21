@@ -55,66 +55,7 @@ cd token
 }
 ```
 
-### Step 3: Start a local replica:
-
-```bash
-dfx start --background --clean
-```
-
-### Step 4: Create a new identity that will work as a minting account:
-
-```bash
-dfx identity new minter --storage-mode plaintext
-dfx identity use minter
-export MINTER=$(dfx identity get-principal)
-```
-
-> Transfers from the minting account will create Mint transactions. Transfers to the minting account will create Burn transactions.
-
-### Step 5: Switch back to your default identity and record its principal to mint an initial balance to when deploying the ledger:
-
-```bash
-dfx identity use default
-export DEFAULT=$(dfx identity get-principal)
-```
-
-### Step 6: Deploy the ICRC-1 ledger locally:
-
-Take a moment to read the details of the call made below. Not only are you deploying an ICRC-1 ledger canister, you are also:
-
--   Setting the minting account to the principal you saved in a previous step (`MINTER`)
--   Minting 100 tokens to the DEFAULT principal
--   Setting the transfer fee to 0.0001 tokens
--   Naming the token Local ICRC1 / L-ICRC1
-
-```bash
-dfx deploy icrc1_ledger_canister --argument "(variant { Init =
-record {
-     token_symbol = \"ICRC1\";
-     token_name = \"L-ICRC1\";
-     minting_account = record { owner = principal \"${MINTER}\" };
-     transfer_fee = 10_000;
-     metadata = vec {};
-     initial_balances = vec { record { record { owner = principal \"${DEFAULT}\"; }; 10_000_000_000; }; };
-     archive_options = record {
-         num_blocks_to_archive = 1000;
-         trigger_threshold = 2000;
-         controller_id = principal \"${MINTER}\";
-     };
- }
-})"
-```
-
-If successful, the output should be:
-
-```bash
-Deployed canisters.
-URLs:
-  Backend canister via Candid interface:
-    icrc1_ledger_canister: http://127.0.0.1:4943/?canisterId=bnz7o-iuaaa-aaaaa-qaaaa-cai&id=mxzaz-hqaaa-aaaar-qaada-cai
-```
-
-### Step 7: Prepare the token canister:
+### Step 3: Prepare the token canister:
 
 Replace the contents of the `src/token_backend/main.mo` file with the following:
 
@@ -181,8 +122,68 @@ actor {
 
 ```
 
+### Step 4: Start a local replica:
+
+```bash
+dfx start --background --clean
+```
+
+### Step 5: Create a new identity that will work as a minting account:
+
+```bash
+dfx identity new minter --storage-mode plaintext
+dfx identity use minter
+export MINTER=$(dfx identity get-principal)
+```
+
+> Transfers from the minting account will create Mint transactions. Transfers to the minting account will create Burn transactions.
+
+### Step 6: Switch back to your default identity and record its principal to mint an initial balance to when deploying the ledger:
+
+```bash
+dfx identity use default
+export DEFAULT=$(dfx identity get-principal)
+```
+
+### Step 7: Deploy the ICRC-1 ledger locally:
+
+Take a moment to read the details of the call made below. Not only are you deploying an ICRC-1 ledger canister, you are also:
+
+-   Setting the minting account to the principal you saved in a previous step (`MINTER`)
+-   Minting 100 tokens to the DEFAULT principal
+-   Setting the transfer fee to 0.0001 tokens
+-   Naming the token Local ICRC1 / L-ICRC1
+
+```bash
+dfx deploy icrc1_ledger_canister --argument "(variant { Init =
+record {
+     token_symbol = \"ICRC1\";
+     token_name = \"L-ICRC1\";
+     minting_account = record { owner = principal \"${MINTER}\" };
+     transfer_fee = 10_000;
+     metadata = vec {};
+     initial_balances = vec { record { record { owner = principal \"${DEFAULT}\"; }; 10_000_000_000; }; };
+     archive_options = record {
+         num_blocks_to_archive = 1000;
+         trigger_threshold = 2000;
+         controller_id = principal \"${MINTER}\";
+     };
+ }
+})"
+```
+
+If successful, the output should be:
+
+```bash
+Deployed canisters.
+URLs:
+  Backend canister via Candid interface:
+    icrc1_ledger_canister: http://127.0.0.1:4943/?canisterId=bnz7o-iuaaa-aaaaa-qaaaa-cai&id=mxzaz-hqaaa-aaaar-qaada-cai
+```
+
+
 ### Step 8: Test on CandidUI:
-After successfully preparation of the token canister, a link should be provided. By following the link, you will be able to test the canister on the CandidUI.
+After deploying ICRC-1 ledger locally, a link should be provided. By following the link, you will be able to test the canister on the CandidUI.
 
 ## Additions
 
